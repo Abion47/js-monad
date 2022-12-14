@@ -1,0 +1,15 @@
+{
+  "name": "monad",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc -p .",
+    "clean": "rm -rf lib"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "~4.9.4"
+  }
+}
