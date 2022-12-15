@@ -31,18 +31,10 @@ jobs:
           name: Run tests
           command: npm test
       - codecov/upload:
-          token: CODECOV_TOKEN=5ef4cba8-d010-4669-ba58-c7c6b39160eb 
           file: coverage/lcov.info 
           validate_url: true 
-          flags: unittests 
 
 workflows:
-  # Below is the definition of your workflow.
-  # Inside the workflow, you provide the jobs you want to run, e.g this workflow runs the build-and-test job above.
-  # CircleCI will run this workflow on every commit.
-  # For more details on extending your workflow, see the configuration docs: https://circleci.com/docs/2.0/configuration-reference/#workflows
   run-unit-tests:
     jobs:
       - build-and-test
-      # For running simple node tests, you could optionally use the node/test job from the orb to replicate and replace the job above in fewer lines.
-      # - node/test
