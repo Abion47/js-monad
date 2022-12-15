@@ -47,7 +47,7 @@ export abstract class Option<T> {
    * @param value A nullable value.
    * @returns Some if the `value` is not null, None otherwise.
    */
-  static from<T>(value: T | null): Option<T> {
+  static from<T>(value: T | null | undefined): Option<T> {
     if (value == null) return new None();
     return new Some<T>(value);
   }

@@ -21,7 +21,7 @@ export function isLeft<TLeft, TRight>(
  */
 export function isRight<TLeft, TRight>(
   either: Either<TLeft, TRight>
-): either is Left<TLeft, TRight> {
+): either is Right<TLeft, TRight> {
   return either.isRight;
 }
 
@@ -40,8 +40,8 @@ export abstract class Either<TLeft, TRight> {
    * @param value A value.
    * @returns A Right storing the given `value`.
    */
-  static right<TLeft, TRight>(value: TLeft) {
-    return new Left<TLeft, TRight>(value);
+  static right<TLeft, TRight>(value: TRight) {
+    return new Right<TLeft, TRight>(value);
   }
 
   /**
@@ -65,8 +65,7 @@ export abstract class Either<TLeft, TRight> {
    * @returns The value stored in the Left.
    */
   expectLeft(message: string): TLeft {
-    if (this instanceof Left<TLeft, TRight>)
-      return (this as Left<TLeft, TRight>).value;
+    if (isLeft(this)) return this.value;
     throw new Error(message);
   }
 
@@ -77,8 +76,7 @@ export abstract class Either<TLeft, TRight> {
    * @returns The value stored in the Right.
    */
   expectRight(message: string): TRight {
-    if (this instanceof Right<TLeft, TRight>)
-      return (this as Right<TLeft, TRight>).value;
+    if (isRight(this)) return this.value;
     throw new Error(message);
   }
 
@@ -99,8 +97,7 @@ export abstract class Either<TLeft, TRight> {
    * @returns The value stored in the Left, or `value` if the either is a Right.
    */
   unwrapLeftOr(value: TLeft): TLeft {
-    if (this instanceof Left<TLeft, TRight>)
-      return (this as Left<TLeft, TRight>).value;
+    if (isLeft(this)) return this.value;
     return value;
   }
 
@@ -121,8 +118,7 @@ export abstract class Either<TLeft, TRight> {
    * @returns The value stored in the Right, or `value` if the either is a Left.
    */
   unwrapRightOr(value: TRight): TRight {
-    if (this instanceof Right<TLeft, TRight>)
-      return (this as Right<TLeft, TRight>).value;
+    if (isRight(this)) return this.value;
     return value;
   }
 
@@ -290,7 +286,7 @@ export abstract class Either<TLeft, TRight> {
    * @returns A Some or a None, depending on the type of this either.
    */
   asOptionRight(): Option<TRight> {
-    if (this.isLeft) return new Some(this.unwrapRight());
+    if (this.isRight) return new Some(this.unwrapRight());
     return new None();
   }
 
@@ -301,7 +297,7 @@ export abstract class Either<TLeft, TRight> {
    * @returns A Some with this either's right value or the given value, depending on the type of this either.
    */
   asOptionRightOr(value: TRight): Option<TRight> {
-    if (this.isLeft) return new Some(this.unwrapRight());
+    if (this.isRight) return new Some(this.unwrapRight());
     return new Some(value);
   }
 
@@ -325,8 +321,8 @@ export abstract class Either<TLeft, TRight> {
    * @returns A Ok or a Err, depending on the type of this either.
    */
   asResultRight<E extends Error>(err?: E): Result<TRight, E> {
-    if (this.isLeft) return new Ok(this.unwrapRight());
-    return new Err(err ?? (new Error("Either was not a Left") as E));
+    if (this.isRight) return new Ok(this.unwrapRight());
+    return new Err(err ?? (new Error("Either was not a Right") as E));
   }
 }
 

@@ -39,7 +39,7 @@ export abstract class Result<T, E extends Error> {
    * @param error An error.
    * @returns A Err storing the given `error`.
    */
-  static error<T, E extends Error>(error: E): Result<T, E> {
+  static err<T, E extends Error>(error: E): Result<T, E> {
     return new Err<T, E>(error);
   }
 
