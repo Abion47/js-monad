@@ -18,7 +18,7 @@ describe("option", () => {
     expect(b.isNone).toBeTrue();
     expect(() => b.unwrap()).toThrow();
 
-    const c = Option.from<string>("abc");
+    const c = Option.from("abc");
     expect(c.isSome).toBeTrue();
     expect(c.isNone).toBeFalse();
     expect(c.unwrap()).toBe("abc");
@@ -32,6 +32,36 @@ describe("option", () => {
     expect(e.isSome).toBeFalse();
     expect(e.isNone).toBeTrue();
     expect(() => e.unwrap()).toThrow();
+
+    const f = Option.of(() => "abc");
+    expect(f.isSome).toBeTrue();
+    expect(f.isNone).toBeFalse();
+    expect(f.unwrap()).toBe("abc");
+
+    const g = Option.of<string>(() => null);
+    expect(g.isSome).toBeFalse();
+    expect(g.isNone).toBeTrue();
+    expect(() => g.unwrap()).toThrow();
+
+    const h = Option.of<string>(() => undefined);
+    expect(h.isSome).toBeFalse();
+    expect(h.isNone).toBeTrue();
+    expect(() => h.unwrap()).toThrow();
+
+    function evenOnly(n: number): number | undefined {
+      if (n % 2 === 0) return n;
+      return undefined;
+    }
+
+    const i = Option.of(() => evenOnly(4));
+    expect(i.isSome).toBeTrue();
+    expect(i.isNone).toBeFalse();
+    expect(i.unwrap()).toBe(4);
+
+    const j = Option.of(() => evenOnly(5));
+    expect(j.isSome).toBeFalse();
+    expect(j.isNone).toBeTrue();
+    expect(() => j.unwrap()).toThrow();
   });
 
   test("unwrapping", () => {

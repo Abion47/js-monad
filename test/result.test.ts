@@ -47,6 +47,34 @@ describe("result", () => {
     expect(f.isOk).toBeFalse();
     expect(f.isErr).toBeTrue();
     expect(() => f.unwrap()).toThrow();
+
+    const g = Result.of(() => {
+      return "abc";
+    });
+    expect(g.isOk).toBeTrue();
+    expect(g.isErr).toBeFalse();
+    expect(g.unwrap()).toBe("abc");
+
+    const h = Result.of(() => {
+      throw new Error("abc");
+    });
+    expect(h.isOk).toBeFalse();
+    expect(h.isErr).toBeTrue();
+    expect(() => h.unwrap()).toThrow();
+
+    const i = Result.of(() => {
+      throw "abc";
+    });
+    expect(i.isOk).toBeFalse();
+    expect(i.isErr).toBeTrue();
+    expect(() => i.unwrap()).toThrow();
+
+    const j = Result.of(() => {
+      throw null;
+    });
+    expect(j.isOk).toBeFalse();
+    expect(j.isErr).toBeTrue();
+    expect(() => i.unwrap()).toThrow();
   });
 
   test("unwrapping", () => {

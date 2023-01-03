@@ -53,6 +53,17 @@ export abstract class Option<T> {
   }
 
   /**
+   * Wraps an action and returns the result of the action as a Some. If the action
+   * returns null or undefined, this returns a None.
+   * @param action The action to take.
+   * @returns Some if the action returns a non-null value, None otherwise.
+   */
+  static of<T>(action: () => T | null | undefined): Option<T> {
+    const val = action();
+    return this.from(val);
+  }
+
+  /**
    * Returns true if this option is a Some.
    */
   get isSome(): boolean {

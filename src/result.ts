@@ -44,6 +44,26 @@ export abstract class Result<T, E extends Error> {
   }
 
   /**
+   * Wraps an action in a try-catch and returns the Ok result of calling the action. If the action
+   * throws an error, the error is caught and returned as an Err. (If the caught error is not
+   * a subtype of Error, it is stringified and wrapped in an Error. Note that this is not a recommended
+   * practice - always throw an instance of Error.)
+   * @param action The action to take.
+   * @returns An Ok of the action, or an Err if the action throws an error.
+   */
+  static of<T>(action: () => T): Result<T, Error> {
+    try {
+      const val = action();
+      return this.ok(val);
+    } catch (e: unknown) {
+      if (e instanceof Error) return this.err(e);
+      return this.err(
+        new Error(`Non-error value: ${e?.toString() ?? "undefined"}`)
+      );
+    }
+  }
+
+  /**
    * Wraps an asynchronous action and listens for the result. If the promise is successful,
    * the value returned is an Ok with the returned result as the value. If the promise throws
    * an error, the value returned is an Err with the thrown error as the value.
